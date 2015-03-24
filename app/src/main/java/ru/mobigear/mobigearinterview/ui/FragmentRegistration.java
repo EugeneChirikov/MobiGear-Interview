@@ -18,8 +18,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 import ru.mobigear.mobigearinterview.R;
-import ru.mobigear.mobigearinterview.network.LoginResponseParser;
-import ru.mobigear.mobigearinterview.network.RegistrationRequestBuilder;
+import ru.mobigear.mobigearinterview.network.ResponseParser;
+import ru.mobigear.mobigearinterview.network.TokenParser;
+import ru.mobigear.mobigearinterview.network.RegistrationRequest;
 import ru.mobigear.mobigearinterview.network.ServerResponse;
 import ru.mobigear.mobigearinterview.network.VolleyHelper;
 import ru.mobigear.mobigearinterview.utils.Utils;
@@ -71,7 +72,7 @@ public class FragmentRegistration extends FragmentAuth {
     }
 
     private void request(final String email, final String password, final String fio, String phone) {
-        RegistrationRequestBuilder requestBuilder = new RegistrationRequestBuilder(fio, email, phone, password);
+        RegistrationRequest requestBuilder = new RegistrationRequest(fio, email, phone, password);
         String url = requestBuilder.getURL();
         String params =  requestBuilder.getPostParameters().toString();
         Log.v(TAG, url);
@@ -83,12 +84,12 @@ public class FragmentRegistration extends FragmentAuth {
                     @Override
                     public void onResponse(JSONObject response) {
                         Utils.dismissProgressDialog(getFragmentManager(), progressDialogTag);
-                        LoginResponseParser parser = new LoginResponseParser();
-                        ServerResponse<String> parsedResponse = parser.parseResponse(response);
+                        ServerResponse parsedResponse = ResponseParser.parseResponse(response);
                         if (parsedResponse.isError())
                             handleError(parsedResponse.getCode());
                         else {
-                            String token = parsedResponse.getData();
+                            TokenParser parser = new TokenParser();
+                            String token = parser.parseData(parsedResponse.getData());
                             handleSuccess(email, password, fio ,token);
                         }
                     }

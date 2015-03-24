@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MobiGear Interview</string>
     <string name="account_type">mobigear_interview_account</string>;
+    <string name="content_authority">ru.mobigear.mobigearinterview.provider</string>
 
     <string name="title_section_login">Вход</string>
     <string name="title_section_registration">Регистрация</string>

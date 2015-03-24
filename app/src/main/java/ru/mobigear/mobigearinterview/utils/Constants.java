@@ -8,4 +8,5 @@ public class Constants {
     public static final String LAST_USER_LOGIN_KEY = "last_user_login_key";
     public static final String ACCOUNT_TYPE = "mobigear_interview_account";
     public static final String ACCOUNT_TOKEN_TYPE = "mobigear_interview_account_token_type";
+    public static final String REQUEST_TYPE_KEY = "request_type_key";
 }

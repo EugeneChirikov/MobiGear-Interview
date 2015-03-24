@@ -7,15 +7,15 @@ import org.json.JSONObject;
  */
 public abstract class ResponseParser<T> {
 
-    public ServerResponse<T> parseResponse(JSONObject response) {
+    public static ServerResponse parseResponse(JSONObject response) {
         if (response == null)
             return null;
-        ServerResponse<T> serverResponse = new ServerResponse<T>();
+        ServerResponse serverResponse = new ServerResponse();
         JSONObject result = response.optJSONObject("result");
         serverResponse.setCode(result.optInt("code", -1));
-        serverResponse.setData(parse(result));
+        serverResponse.setData(result);
         return serverResponse;
     }
 
-    protected abstract T parse(JSONObject response);
+    public abstract T parseData(JSONObject data);
 }

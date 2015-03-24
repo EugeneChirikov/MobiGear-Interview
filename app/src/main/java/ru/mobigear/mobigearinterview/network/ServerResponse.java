@@ -1,17 +1,19 @@
 package ru.mobigear.mobigearinterview.network;
 
+import org.json.JSONObject;
+
 /**
  * Created by eugene on 3/23/15.
  */
-public class ServerResponse<T> {
+public class ServerResponse {
     private int code;
-    private T data;
+    private JSONObject data;
 
     public void setCode(int code) {
         this.code = code;
     }
 
-    public void setData(T data) {
+    public void setData(JSONObject data) {
         this.data = data;
     }
 
@@ -19,7 +21,7 @@ public class ServerResponse<T> {
         return code;
     }
 
-    public T getData() {
+    public JSONObject getData() {
         return data;
     }
 

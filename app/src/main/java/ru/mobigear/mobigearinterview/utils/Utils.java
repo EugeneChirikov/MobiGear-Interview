@@ -4,9 +4,16 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
+
+import ru.mobigear.mobigearinterview.R;
+import ru.mobigear.mobigearinterview.data.DatabaseHelper;
 import ru.mobigear.mobigearinterview.ui.DialogProgress;
 
 /**
@@ -27,17 +34,40 @@ public class Utils {
         prefsEditor.commit();
     }
 
-//    public static void logout(final Context context) {
-//        removePersistedValue(context, Constants.LAST_USER_LOGIN_KEY);
-//        final Handler handler = new Handler();
-//        Thread deleteDBThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                DatabaseHelper.getInstance(context).clearDatabase();
-//            }
-//        });
-//        deleteDBThread.start();
-//    }
+    public static String getPersistedValue(Context context, String key)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getString(key, null);
+    }
+
+    public static void logout(final Context context) {
+        removePersistedValue(context, Constants.LAST_USER_LOGIN_KEY);
+        final Handler handler = new Handler();
+        Thread deleteDBThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseHelper.getInstance(context).clearDatabase();
+            }
+        });
+        deleteDBThread.start();
+    }
+
+    public static Account getLastAccount(Context context) {
+        String login = getPersistedValue(context, Constants.LAST_USER_LOGIN_KEY);
+        if (login != null && !login.isEmpty())
+        {
+            AccountManager accountManager = AccountManager.get(context);
+            Account[] accounts = accountManager.getAccountsByType(context.getString(R.string.account_type));
+            for (int i = 0; i < accounts.length; ++i) {
+                Account a = accounts[i];
+                String p = accountManager.getPassword(a);
+                if (p != null && a.name.equals(login)) {
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
 
     public static String extractEmailLoginFrom(Account a) {
         return a.name;
@@ -68,5 +98,12 @@ public class Utils {
             if (s == null || s.isEmpty())
                 return false;
         return true;
+    }
+
+    public static String bitmapToBase64String(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
+        byte [] byteArray = outputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }

@@ -11,38 +11,39 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
     private static DatabaseHelper mInstance;
-
-    private static final String DATABASE_CREATE_CAFE_WITH_DETAILS = "CREATE TABLE "
-            + DataContract.CafeWithDetails.TABLE_NAME + " ("
-            + DataContract.CafeWithDetails._ID + " integer primary key autoincrement, "
-            + DataContract.CafeWithDetails.COLUMN_CAFE_ID + " integer not null, "
-            + DataContract.CafeWithDetails.COLUMN_ALIAS + " text not null, "
-            + DataContract.CafeWithDetails.COLUMN_NAME + " text not null, "
-            + DataContract.CafeWithDetails.COLUMN_ADDITIONAL_INFO + " text not null, "
-            + DataContract.CafeWithDetails.COLUMN_MIN_AMOUNT + " real not null, "
-            + DataContract.CafeWithDetails.COLUMN_DELIVERY_PRICE + " real not null, "
-            + DataContract.CafeWithDetails.COLUMN_AVG_DELIVERY_TIME + " integer not null, "
-            + DataContract.CafeWithDetails.COLUMN_LOGO + " text not null, "
-            + DataContract.CafeWithDetails.COLUMN_IS_ORDER_ALLOWED + " integer not null, "
-            + DataContract.CafeWithDetails.COLUMN_DESCRIPTION + " text not null, "
-            + DataContract.CafeWithDetails.COLUMN_PHONE + " text, "
-            + DataContract.CafeWithDetails.COLUMN_EMAIL + " text, "
-            + DataContract.CafeWithDetails.COLUMN_WEBSITE + " text, "
-            + DataContract.CafeWithDetails.COLUMN_MENU_ID + " integer not null, "
-            + DataContract.CafeWithDetails.COLUMN_ADDRESS_ID + " integer not null, "
-            + " UNIQUE (" + DataContract.CafeWithDetails.COLUMN_CAFE_ID + ") ON CONFLICT FAIL, "
-            + " FOREIGN KEY ( " + DataContract.CafeWithDetails.COLUMN_ADDRESS_ID + " ) REFERENCES "
-            + DataContract.CafeAddress.TABLE_NAME + "(" + DataContract.CafeAddress._ID + ") ON DELETE CASCADE " + ");";
-
-
-
     public static final String DATABASE_NAME = "mobigearinterview.db";
     private static final int DATABASE_VERSION = 1;
 
+    private static final String CREATE_ARTICLE = "CREATE TABLE "
+            + DataContract.Article.TABLE_NAME + " ("
+            + DataContract.Article._ID + " integer primary key autoincrement, "
+            + DataContract.Article.ARTICLE_ID + " integer not null, "
+            + DataContract.Article.TITLE + " text not null, "
+            + DataContract.Article.BODY + " text not null, "
+            + DataContract.Article.IMAGE_URL + " text not null, "
+            + " UNIQUE (" + DataContract.Article.ARTICLE_ID + ") ON CONFLICT FAIL );";
+
+    public static final String CREATE_EVENT = "CREATE TABLE "
+            + DataContract.Event.TABLE_NAME + " ("
+            + DataContract.Event._ID + " integer primary key autoincrement, "
+            + DataContract.Event.EVENT_ID + " integer not null, "
+            + DataContract.Event.TITLE + " text not null, "
+            + DataContract.Event.BODY + " text not null, "
+            + DataContract.Event.IMAGE_URL + " text not null, "
+            + DataContract.Event.DATE + " text not null, "
+            + DataContract.Event.IS_USER_REGISTERED + " integer not null, "
+            + " UNIQUE (" + DataContract.Event.EVENT_ID + ") ON CONFLICT FAIL );";
+
+    public static final String CREATE_PROFILE = "CREATE TABLE "
+            + DataContract.Profile.TABLE_NAME + " ("
+            + DataContract.Profile._ID + " integer primary key autoincrement, "
+            + DataContract.Profile.FIO + " text not null, "
+            + DataContract.Profile.EMAIL + " text not null, "
+            + DataContract.Profile.PHONE + " text not null, "
+            + DataContract.Profile.AVATAR_URL + " text not null, "
+            + " UNIQUE (" + DataContract.Profile.EMAIL + ") ON CONFLICT FAIL );";
+
     public static DatabaseHelper getInstance(Context context) {
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
         if (mInstance == null) {
             mInstance = new DatabaseHelper(context.getApplicationContext());
         }
@@ -57,9 +58,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database)
     {
-        database.execSQL(DATABASE_CREATE_CAFE_DELIVERIES_LINK);
-        database.execSQL(DATABASE_CREATE_ADDITIONAL_SERVICE);
-
+        database.execSQL(CREATE_ARTICLE);
+        database.execSQL(CREATE_EVENT);
+        database.execSQL(CREATE_PROFILE);
     }
 
     @Override
@@ -89,8 +90,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void clearDatabase(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + DataContract.CafeWithDetails.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DataContract.CafeAddress.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Cafe.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Article.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Event.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DataContract.Profile.TABLE_NAME);
     }
 }

@@ -9,7 +9,7 @@ import android.net.Uri;
 /**
  * Created by eugene on 3/24/15.
  */
-public class AbstractPath {
+public abstract class AbstractPath {
     private DatabaseHelper mOpenHelper;
     private ContentResolver contentResolver;
 
@@ -17,29 +17,57 @@ public class AbstractPath {
         this.mOpenHelper = helper;
         this.contentResolver = resolver;
     }
-    public String getType(Uri uri);
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder);
-    public Uri insert(Uri uri, ContentValues values);
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs);
-    public int delete(Uri uri, String selection, String[] selectionArgs);
 
-    protected long insertValuesIntoTable(ContentValues values, String tableName) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        long _id = db.insert(tableName, null, values);
-        if (_id > 0)
-            return _id;
-        else
-            throw new android.database.SQLException("Failed to insert row into " + tableName);
+    protected abstract String getPath();
+    protected abstract String getTable();
+
+    public String getType() {
+        return DataContract.getContentType(getPath());
     }
 
-    protected Cursor defaultQuery(String tableName, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return mOpenHelper.getReadableDatabase().query(
-                tableName,
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Cursor retCursor = mOpenHelper.getReadableDatabase().query(
+                getTable(),
                 projection,
                 selection,
                 selectionArgs,
                 null,
                 null,
                 sortOrder);
+        if (retCursor != null)
+            retCursor.setNotificationUri(contentResolver, uri);
+        return retCursor;
     }
+
+    public Uri insert(ContentValues values) {
+        String tableName = getTable();
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        long _id = db.insert(tableName, null, values);
+        if (_id > 0) {
+            Uri retUri = DataContract.buildUri(_id, getPath());
+            contentResolver.notifyChange(retUri, null);
+            return retUri;
+        }
+        else
+            throw new android.database.SQLException("Failed to insert row into " + tableName);
+    }
+
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        int rowsAffected = mOpenHelper.getWritableDatabase().update(getTable(), values, selection, selectionArgs);
+        contentResolver.notifyChange(uri, null);
+        return rowsAffected;
+    }
+
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        if (selection == null)
+            selection = "";
+        int rowsDeleted = mOpenHelper.getReadableDatabase().delete(
+                getTable(),
+                selection,
+                selectionArgs);
+        contentResolver.notifyChange(uri, null);
+        return rowsDeleted;
+    }
+
+
 }

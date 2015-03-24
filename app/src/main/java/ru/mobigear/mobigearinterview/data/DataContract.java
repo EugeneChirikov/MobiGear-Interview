@@ -8,9 +8,8 @@ import android.provider.BaseColumns;
  * Created by eugene on 3/24/15.
  */
 public class DataContract {
-    public static final String CONTENT_AUTHORITY = "ru.bonus25.bonustimecafes.provider";
+    public static final String CONTENT_AUTHORITY = "ru.mobigear.mobigearinterview.provider";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     public static final String MIMETYPE_DIR = "vnd.android.cursor.dir/";
     public static final String MIMETYPE_ITEM = "vnd.android.cursor.item/";
     public static final String PATH_ARTICLE = "article";
@@ -39,18 +38,31 @@ public class DataContract {
     }
 
     public static final class Article implements BaseColumns {
-        public static final String TABLE_NAME = "cart_dishes";
-        public static final String COLUMN_COUNT = "count";
-        public static final String COLUMN_CART_ID = "cart_id";
+        public static final String TABLE_NAME = "article";
+
+        public static final String ARTICLE_ID = "article_id";
+        public static final String TITLE = "title";
+        public static final String BODY = "body";
+        public static final String IMAGE_URL = "image_url";
     }
 
     public static final class Event implements BaseColumns {
-        public static final String TABLE_NAME = "cart";
+        public static final String TABLE_NAME = "event";
 
-        public static final String COLUMN_CART_ID = "cart_id";
-        public static final String COLUMN_CAFE_ID = "cafe_id";
-        public static final String COLUMN_TOTAL_PRICE = "total_price";
+        public static final String EVENT_ID = "event_id";
+        public static final String TITLE = "title";
+        public static final String BODY = "body";
+        public static final String DATE = "date";
+        public static final String IMAGE_URL = "image_url";
+        public static final String IS_USER_REGISTERED = "is_user_registered";
     }
 
+    public static final class Profile implements BaseColumns {
+        public static final String TABLE_NAME = "profile";
 
+        public static final String FIO = "fio";
+        public static final String EMAIL = "email";
+        public static final String PHONE = "phone";
+        public static final String AVATAR_URL = "avatar_url";
+    }
 }

@@ -33,7 +33,7 @@ public abstract class AbstractRequest {
         this.token = token;
     }
 
-    public final void handleResponse(Context context, Object result) {
+    public final void handleResponse(Context context, JSONObject result) {
         if (responseHandler != null)
             responseHandler.handle(context, result);
     }

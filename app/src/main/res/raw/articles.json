@@ -1,0 +1,25 @@
+{
+    "result": {
+        "code": 200,
+        "articles": [
+            {
+                "id": 1,
+                "title": "Developing audio apps for Android Auto",
+                "body": "<p>Have you ever wanted to develop apps for the car, but found the variety of OEMs and proprietary platforms too big of a hurdle? Now with <a href=\"http://android-developers.blogspot.com/2015/03/take-your-apps-on-road-with-android-auto.html\">Android Auto</a>, you can target a single platform supported by vehicles coming soon from 28 manufacturers.</p>\n<p>Using familiar Android APIs, you can easily add a great in-car user experience to your existing audio apps, with just a small amount of code. If you&#8217;re new to developing for Auto, watch this DevByte for an overview of the APIs, and check out the <a href=\"https://developer.android.com/training/auto/index.html?utm_campaign=androidauto-audio-315&utm_source=dac&utm_medium=blog\">training docs</a> for an end-to-end tutorial.</p>",
+                "image": "http://i913.photobucket.com/albums/ac333/NoddyBadge/Android/android.png"
+            },
+            {
+                "id": 2,
+                "title": "Android Developer Story: Outfit7 — Building an entertainment company with Google",
+                "body": "<p><a href=\"http://outfit7.com\">Outfit7</a>, creators of <a href=\"https://play.google.com/store/apps/details?id=com.outfit7.mytalkingtomfree\">My Talking Tom</a> and <a href=\"https://play.google.com/store/apps/details?id=com.outfit7.mytalkingangelafree\">My Talking Angela</a>, recently announced they&#8217;ve achieved 2.5 billion app downloads across their portfolio. The company now offers a complete entertainment experience to users spanning mobile apps, user generated and original YouTube content, and a range of toys, clothing, and accessories. They even have a silver screen project underway. </p>\n<p>We caught up with Iza Login, Rok Zorko and Marko Štamcar - some of the co-founders-  in Ljubljana, Slovenia, to learn best practices that helped them in reaching this milestone.</p>",
+                "image": "http://9to5google.files.wordpress.com/2012/01/android.png"
+            },
+            {
+                "id": 3,
+                "title": "Creating Better User Experiences on Google Play",
+                "body": "<p>Whether it's a way to <a href=\"https://play.google.com/store/apps/details?id=com.fitnesskeeper.runkeeper.pro\">track workouts</a>, <a href=\"https://play.google.com/store/apps/details?id=com.escapistgames.starchart\">chart the nighttime stars</a>, or <a href=\"https://play.google.com/store/apps/details?id=com.supercell.clashofclans\">build a new reality</a> and battle for world domination, Google Play gives developers a platform to create engaging apps and games and build successful businesses. Key to that mission is offering users a positive experience while searching for apps and games on Google Play. Today we have two updates to improve the experience for both developers and users.</p>",
+                "image": "http://www.serefakyuz.com/wp-content/uploads/android_studio_logo-300x300.png"
+            }
+        ]
+    }
+}

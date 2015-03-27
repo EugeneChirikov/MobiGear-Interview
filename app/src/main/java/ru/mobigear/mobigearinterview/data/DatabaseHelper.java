@@ -79,16 +79,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public synchronized void clearDatabase() {
-        SQLiteDatabase db = mInstance.getWritableDatabase();
-        db.beginTransaction();
-        clearDatabase(db);
-        onCreate(db);
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
-    }
-
     private void clearDatabase(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.Article.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataContract.Event.TABLE_NAME);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import ru.mobigear.mobigearinterview.sync.ContentSyncAdapter;
 import ru.mobigear.mobigearinterview.utils.Constants;
 import ru.mobigear.mobigearinterview.utils.Utils;
 
@@ -35,12 +36,16 @@ public abstract class FragmentAuth extends Fragment {
 
     protected abstract Account getAccount(String login, String password, String userName);
 
-    protected void handleSuccess(String email, String password, String userName, String authToken) {
+    protected void handleSuccess(String email) {
         Toast.makeText(getActivity(), positiveMessage, Toast.LENGTH_SHORT).show();
         Utils.persistValue(getActivity(), Constants.LAST_USER_LOGIN_KEY, email);
+    }
+
+    protected void handleSuccess(String email, String password, String userName, String authToken) {
+        handleSuccess(email);
         Account account = getAccount(email, password, userName);
-        accountManager.setAuthToken(account, Constants.ACCOUNT_TYPE, authToken);
-        //        ContentSyncAdapter.syncImmediately(getActivity(), new OrdersQuery().getBundle());
+        accountManager.setAuthToken(account, Constants.ACCOUNT_TOKEN_TYPE, authToken);
+        Utils.refreshEverything(getActivity());
         Activity activity = getActivity();
         if (activity instanceof ActivityAuth) {
             Bundle result = new Bundle();

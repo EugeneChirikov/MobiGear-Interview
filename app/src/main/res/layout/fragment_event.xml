@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/general_padding">
+        <include layout="@layout/list_item_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/event_body"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+        <ViewSwitcher
+            android:id="@+id/attend_switcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right">
+            <Button
+                android:id="@+id/attend_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Записаться"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Я пойду"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/green"/>
+        </ViewSwitcher>
+    </LinearLayout>
+</ScrollView>

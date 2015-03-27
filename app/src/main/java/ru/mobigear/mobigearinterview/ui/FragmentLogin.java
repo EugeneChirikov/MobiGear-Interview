@@ -3,6 +3,7 @@ package ru.mobigear.mobigearinterview.ui;
 import android.accounts.Account;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +13,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONObject;
 
 import ru.mobigear.mobigearinterview.R;
 import ru.mobigear.mobigearinterview.network.LoginRequest;
-import ru.mobigear.mobigearinterview.network.ResponseParser;
+import ru.mobigear.mobigearinterview.network.ResponseListener;
 import ru.mobigear.mobigearinterview.network.TokenParser;
-import ru.mobigear.mobigearinterview.network.ServerResponse;
 import ru.mobigear.mobigearinterview.network.VolleyHelper;
 import ru.mobigear.mobigearinterview.utils.Constants;
 import ru.mobigear.mobigearinterview.utils.Utils;
@@ -31,7 +27,7 @@ import ru.mobigear.mobigearinterview.utils.Utils;
  * Created by eugene on 3/23/15.
  */
 public class FragmentLogin extends FragmentAuth {
-    private static final String progressDialogTag = "reg_progress_dialog_tag";
+    private static final String TAG = FragmentLogin.class.getSimpleName();
     private EditText emailEdit;
     private EditText passwordEdit;
     private AccountsAdapter accountsAdapter;
@@ -65,11 +61,18 @@ public class FragmentLogin extends FragmentAuth {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Account account = (Account) parent.getItemAtPosition(position);
                 String email = Utils.extractEmailLoginFrom(account);
-                String password = Utils.extractPasswordFrom(account, accountManager);
-                requestIfValid(email, password);
+                handleSuccess(email);
+                Utils.refreshEverything(getActivity());
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        VolleyHelper.getRequestQueue(getActivity()).cancelAll(TAG);
+        Utils.dismissProgressDialog(getFragmentManager(), TAG);
     }
 
     private void requestIfValid(String email, String password) {
@@ -86,32 +89,21 @@ public class FragmentLogin extends FragmentAuth {
     }
 
     private void request(final String email, final String password) {
-        LoginRequest requestBuilder = new LoginRequest(email, password);
-        Utils.showProgressDialog(getFragmentManager(), progressDialogTag);
-        JsonObjectRequest request = new JsonObjectRequest
-                (requestBuilder.getURL(), requestBuilder.getPostParameters(),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Utils.dismissProgressDialog(getFragmentManager(), progressDialogTag);
-                        ServerResponse serverResponse = ResponseParser.parseResponse(response);
-                        if (serverResponse.isError())
-                            handleError(serverResponse.getCode());
-                        else {
-                            TokenParser parser = new TokenParser();
-                            String token = parser.parseData(serverResponse.getData());
-                            handleSuccess(email, password, getString(R.string.default_user_name) ,token);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Utils.dismissProgressDialog(getFragmentManager(), progressDialogTag);
-                        handleError(error.networkResponse.statusCode);
-                    }
-                });
-        VolleyHelper.getRequestQueue(getActivity()).add(request);
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        VolleyHelper.makeJSONObjectRequest(getActivity(), getFragmentManager(), loginRequest, TAG, new ResponseListener() {
+            @Override
+            public void onError(int errorCode) {
+                handleError(errorCode);
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+                TokenParser parser = new TokenParser();
+                String token = parser.parseData(response);
+                Log.v(TAG, token);
+                handleSuccess(email, password, getString(R.string.default_user_name) ,token);
+            }
+        });
     }
 
     @Override

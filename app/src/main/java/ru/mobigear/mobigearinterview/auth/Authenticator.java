@@ -8,6 +8,7 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import ru.mobigear.mobigearinterview.ui.ActivityAuth;
 
@@ -15,6 +16,7 @@ import ru.mobigear.mobigearinterview.ui.ActivityAuth;
  * Created by eugene on 3/24/15.
  */
 public class Authenticator extends AbstractAccountAuthenticator {
+    private static final String TAG = Authenticator.class.getSimpleName();
     private Context mContext;
 
     public Authenticator(Context context) {
@@ -47,6 +49,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
         final AccountManager am = AccountManager.get(mContext);
         String authToken = am.peekAuthToken(account, authTokenType);
+        Log.v(TAG, "Token is " + authToken);
         return bundleFromTokenResultData(account.name, account.type, authToken);
     }
 

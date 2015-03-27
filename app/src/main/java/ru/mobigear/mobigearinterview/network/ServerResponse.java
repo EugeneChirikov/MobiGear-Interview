@@ -2,6 +2,8 @@ package ru.mobigear.mobigearinterview.network;
 
 import org.json.JSONObject;
 
+import ru.mobigear.mobigearinterview.utils.Constants;
+
 /**
  * Created by eugene on 3/23/15.
  */
@@ -26,6 +28,6 @@ public class ServerResponse {
     }
 
     public boolean isError() {
-        return code != 200;
+        return code != Constants.NetworkResponseCode.SUCCESS;
     }
 }

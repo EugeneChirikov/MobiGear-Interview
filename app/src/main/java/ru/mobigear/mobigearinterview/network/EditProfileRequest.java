@@ -30,7 +30,7 @@ public class EditProfileRequest extends AbstractRequest {
 
     @Override
     protected void init() {
-
+        responseHandler = new ProfileResponseHandler();
     }
 
     @Override

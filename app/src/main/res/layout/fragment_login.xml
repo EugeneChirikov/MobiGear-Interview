@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="ru.mobigear.mobigearinterview.ui.FragmentLogin">
+    tools:context="ru.mobigear.mobigearinterview.ui.FragmentLogin"
+    android:padding="@dimen/general_padding">
 
     <EditText
         android:id="@+id/email"

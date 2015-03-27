@@ -1,0 +1,28 @@
+{
+    "result": {
+        "code": 200,
+        "events": [
+            {
+                "id": 1,
+                "title": "Google I/O 2013",
+                "body": "<p>I/O is Google’s biggest event of the year, a three-day soiree for the company and its developers to talk about the present and future of Google’s products. It’s also the week Google tends to make its biggest announcements — from the Nexus 7 to Google TV, Chrome to Glass and everything in between, Google plays its biggest cards every year in the middle of May. </p>",
+                "date": "2013-05-15T23:59:59",
+                "image": "http://www.pocketables.com/images/2013/04/Google-IO.jpg"
+            },
+            {
+                "id": 2,
+                "title": "Google I/O 2014",
+                "body": "<p><p>The Google IO conference has On/Off in its name, but it was \"on\" when the Android-maker dissed Apple at the same time it revealed an updated version of its mobile operating system.</p><p>Yes, this year's convention was more subdued. There were no Google Glass skydiving stunts and some products like the <a href=\"http://techradar.com/us/news/portable-devices/moto-360-release-date-news-and-features-1244426\">Moto 360</a> watch are still veiled in darkness.</p><p>That won't matter to Android's core audience. While some companies struggle to expand into new product categories, Google is moving watches, televisions, gaming set-top boxes and even cars.</p><h3>1. Android L is the word</h3><p>Android L is the newest version of Google's iOS 8</a> rival and while it come with the flavorless L name, it'll nonetheless be eaten up by the Android community.</p><p>This version features performance and design optimizations of its billion-strong mobile operating system.</p><p>First up, notifications are being incorporated into the lockscreen. No more having to unlock, swipe down and read. It's all just right there.</p>Android finally gets a better notification system</p>",
+                "date": "2014-06-25T23:59:59",
+                "image": "http://pic.youmobile.org/imgcdn/i-o14-icon-youmobile.png"
+            },
+            {
+                "id": 3,
+                "title": "Google I/O 2015",
+                "body": "<p>Google I/O is for developers—the creative coders who are building what's next. Together we'll explore the latest in tech, mobile & beyond.I/O is two days of hands-on interaction with the latest technologies, inspirational talks and a few surprises in between.If you aren't able to join us for I/O in person this year, you can still make an event out of it. Host or find an I/O Extended event near you and watch the live stream in the company of other developers.</p>",
+                "date": "2015-05-28T23:59:59",
+                "image": "http://androguru.com/wp-content/uploads/2015/02/Google-IO-2015-GoaIndia-AndroGuru.png"
+            }
+        ]
+    }
+}

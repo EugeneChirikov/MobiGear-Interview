@@ -1,0 +1,11 @@
+{
+    "result": {
+        "code": 200,
+        "user": {
+            "fio": "Пупкин Василий Петрович",
+            "email": "pupkin@blablabla.com",
+            "phone": "+79269101010",
+            "avatar": "http://iconlibrary.iconshock.com/wp-content/uploads/2010/02/KungFuPandaiconsiconshock.jpg"
+        }
+    }
+}

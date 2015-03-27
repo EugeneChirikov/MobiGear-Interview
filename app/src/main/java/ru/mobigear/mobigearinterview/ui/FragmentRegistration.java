@@ -3,7 +3,6 @@ package ru.mobigear.mobigearinterview.ui;
 import android.accounts.Account;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONObject;
 
 import ru.mobigear.mobigearinterview.R;
-import ru.mobigear.mobigearinterview.network.ResponseParser;
-import ru.mobigear.mobigearinterview.network.TokenParser;
 import ru.mobigear.mobigearinterview.network.RegistrationRequest;
-import ru.mobigear.mobigearinterview.network.ServerResponse;
+import ru.mobigear.mobigearinterview.network.ResponseListener;
+import ru.mobigear.mobigearinterview.network.TokenParser;
 import ru.mobigear.mobigearinterview.network.VolleyHelper;
 import ru.mobigear.mobigearinterview.utils.Utils;
 
@@ -30,7 +24,6 @@ import ru.mobigear.mobigearinterview.utils.Utils;
  */
 public class FragmentRegistration extends FragmentAuth {
     private static final String TAG = FragmentRegistration.class.getSimpleName();
-    private static final String progressDialogTag = "reg_progress_dialog_tag";
     private EditText fioEdit;
     private EditText emailEdit;
     private EditText passwordEdit;
@@ -64,6 +57,13 @@ public class FragmentRegistration extends FragmentAuth {
         return rootView;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        VolleyHelper.getRequestQueue(getActivity()).cancelAll(TAG);
+        Utils.dismissProgressDialog(getFragmentManager(), TAG);
+    }
+
     private void requestIfValid(String email, String password, String fio, String phone) {
         if (Utils.isInputValid(new String[]{email, password, fio, phone}))
             request(email, password, fio, phone);
@@ -72,36 +72,20 @@ public class FragmentRegistration extends FragmentAuth {
     }
 
     private void request(final String email, final String password, final String fio, String phone) {
-        RegistrationRequest requestBuilder = new RegistrationRequest(fio, email, phone, password);
-        String url = requestBuilder.getURL();
-        String params =  requestBuilder.getPostParameters().toString();
-        Log.v(TAG, url);
-        Log.v(TAG, params);
-        Utils.showProgressDialog(getFragmentManager(), progressDialogTag);
-        JsonObjectRequest request = new JsonObjectRequest
-                (requestBuilder.getURL(), requestBuilder.getPostParameters(),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Utils.dismissProgressDialog(getFragmentManager(), progressDialogTag);
-                        ServerResponse parsedResponse = ResponseParser.parseResponse(response);
-                        if (parsedResponse.isError())
-                            handleError(parsedResponse.getCode());
-                        else {
-                            TokenParser parser = new TokenParser();
-                            String token = parser.parseData(parsedResponse.getData());
-                            handleSuccess(email, password, fio ,token);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Utils.dismissProgressDialog(getFragmentManager(), progressDialogTag);
-                        handleError(error.networkResponse.statusCode);
-                    }
-                });
-        VolleyHelper.getRequestQueue(getActivity()).add(request);
+        RegistrationRequest registrationRequest = new RegistrationRequest(fio, email, phone, password);
+        VolleyHelper.makeJSONObjectRequest(getActivity(), getFragmentManager(), registrationRequest, TAG, new ResponseListener() {
+            @Override
+            public void onError(int errorCode) {
+                handleError(errorCode);
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+                TokenParser parser = new TokenParser();
+                String token = parser.parseData(response);
+                handleSuccess(email, password, fio ,token);
+            }
+        });
     }
 
     private void handleError(int errorCode) {

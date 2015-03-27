@@ -11,10 +11,20 @@
 
     <string name="action_example">Example action</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Обновить</string>
     <string name="title_activity_activity_auth">ActivityAuth</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="default_user_name">Пользователь</string>
     <string name="input_invalid_message">Нужно ввести все данные</string>
+    <string-array name="navigation_array">
+        <item>Пользователь</item>
+        <item>Выход</item>
+        <item>Статьи</item>
+        <item>События</item>
+    </string-array>
+    <string-array name="user_tabs_titles_array">
+        <item>Профиль</item>
+        <item>Вход</item>
+        <item>Регистрация</item>
+    </string-array>
 </resources>

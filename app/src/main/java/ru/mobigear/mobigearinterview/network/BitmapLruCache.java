@@ -3,6 +3,7 @@ package ru.mobigear.mobigearinterview.network;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.LruCache;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -11,6 +12,8 @@ import com.android.volley.toolbox.ImageLoader;
  * Created by eugene on 3/23/15.
  */
 public class BitmapLruCache extends LruCache<String, Bitmap> implements ImageLoader.ImageCache {
+    private static final String TAG = BitmapLruCache.class.getSimpleName();
+
     public BitmapLruCache(Context context) {
         this(getCacheSize(context));
     }
@@ -26,12 +29,14 @@ public class BitmapLruCache extends LruCache<String, Bitmap> implements ImageLoa
 
     @Override
     public Bitmap getBitmap(String url) {
+        Log.v(TAG, "Get: " + url);
         return get(url);
     }
 
     @Override
     public void putBitmap(String url, Bitmap bitmap) {
         put(url, bitmap);
+        Log.v(TAG, "Put: " + url);
     }
 
     /**

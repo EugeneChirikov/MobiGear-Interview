@@ -1,80 +1,64 @@
 package ru.mobigear.mobigearinterview.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import ru.mobigear.mobigearinterview.R;
+import ru.mobigear.mobigearinterview.demo.Demo;
+import ru.mobigear.mobigearinterview.utils.Constants;
+import ru.mobigear.mobigearinterview.utils.Utils;
 
 
 public class ActivityMain extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        OnFragmentsIntaractionListener {
+    private static final String TAG = ActivityMain.class.getSimpleName();
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
     private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
         switch (position) {
-            case 0: {
-                Intent intent = new Intent(this, ActivityAuth.class);
-                startActivity(intent);
+            case Constants.Navigation.USER: {
+                fragment = new FragmentUserTabs();
+                break;
+            }
+            case Constants.Navigation.LOGOUT: {
+                Utils.logout(this);
+                Toast.makeText(this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show();
                 return;
             }
+            case Constants.Navigation.ARTICLES: {
+                fragment = new FragmentArticlesList();
+                break;
+            }
+            case Constants.Navigation.EVENTS: {
+                fragment = new FragmentEventsList();
+                break;
+            }
+            default:
+                return;
         }
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.container, fragment)
-//                .commit();
-    }
-
-    public void onSectionAttached(int number) {
-//        switch (number) {
-//            case 2:
-//                mTitle = getString(R.string.title_section2);
-//                break;
-//            case 3:
-//                mTitle = getString(R.string.title_section3);
-//                break;
-//        }
+        setFragment(fragment, null);
     }
 
     public void restoreActionBar() {
@@ -84,13 +68,9 @@ public class ActivityMain extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.activity_main, menu);
             restoreActionBar();
             return true;
@@ -100,16 +80,32 @@ public class ActivityMain extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            Utils.refreshEverything(this);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setFragment(Fragment fragment, String tag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager
+                .beginTransaction().replace(R.id.container, fragment);
+        if (tag != null)
+            transaction.addToBackStack(tag);
+        transaction.commit();
+    }
+
+    @Override
+    public void articleChosen(long articleId) {
+        Fragment fragment = FragmentArticle.newInstance(articleId);
+        setFragment(fragment, "article_tag");
+    }
+
+    @Override
+    public void eventChosen(long eventId) {
+        Fragment fragment = FragmentEvent.newInstance(eventId);
+        setFragment(fragment, "event_tag");
     }
 }
